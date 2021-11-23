@@ -3,6 +3,7 @@ package graph
 import drawing.DrawingApi
 import java.lang.Math.PI
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
@@ -17,7 +18,7 @@ abstract class Graph(private val drawingApi: DrawingApi) {
         val widthWithOffset = drawingApi.drawingAreaWidth / 2.0
         val heightWithOffset = drawingApi.drawingAreaHeight / 2.0
         val alpha = min(widthWithOffset, heightWithOffset) * 2.0 / 3.0
-        val radius = alpha / 10.0
+        val radius = max(2 * PI * alpha / (verticesCount * 10.0), 5.0)
 
         (0 until verticesCount).forEach {
             val x = widthWithOffset + alpha * cos(2.0 * PI * (1.0 - it / verticesCount.toDouble()))
