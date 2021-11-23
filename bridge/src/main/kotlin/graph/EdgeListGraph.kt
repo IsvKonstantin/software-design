@@ -25,7 +25,7 @@ class EdgeListGraph(private val drawingApi: DrawingApi) : Graph(drawingApi) {
             drawEdge(it.from, it.to)
         }
 
-        drawingApi.show()
+        drawingApi.print()
     }
 
     private data class Edge(val from: Int, val to: Int)

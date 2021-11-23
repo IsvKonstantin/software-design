@@ -12,5 +12,5 @@ interface DrawingApi {
 
     fun drawLine(line: Line)
 
-    fun show()
+    fun print()
 }

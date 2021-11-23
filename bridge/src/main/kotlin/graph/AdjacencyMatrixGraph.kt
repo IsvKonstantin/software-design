@@ -25,6 +25,6 @@ class AdjacencyMatrixGraph(private val drawingApi: DrawingApi) : Graph(drawingAp
             }
         }
 
-        drawingApi.show()
+        drawingApi.print()
     }
 }

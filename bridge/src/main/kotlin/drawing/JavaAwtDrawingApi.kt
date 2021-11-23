@@ -16,9 +16,9 @@ class JavaAwtDrawingApi : DrawingApi, Frame() {
     private val circles = mutableListOf<Ellipse2D.Double>()
     private val lines = mutableListOf<Line2D.Double>()
 
-    override val drawingAreaWidth = 1000
+    override val drawingAreaWidth = 800
 
-    override val drawingAreaHeight = 1000
+    override val drawingAreaHeight = 600
 
     override fun drawCircle(circle: Circle) {
         circles.add(
@@ -42,7 +42,7 @@ class JavaAwtDrawingApi : DrawingApi, Frame() {
         )
     }
 
-    override fun show() {
+    override fun print() {
         addWindowListener(object : WindowAdapter() {
             override fun windowClosing(windowEvent: WindowEvent) {
                 dispose()
@@ -51,6 +51,7 @@ class JavaAwtDrawingApi : DrawingApi, Frame() {
         })
 
         setSize(drawingAreaWidth, drawingAreaHeight)
+        setLocationRelativeTo(null)
         isVisible = true
     }
 
