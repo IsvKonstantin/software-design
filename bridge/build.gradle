@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.10'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 group = 'me.flexatroid'
@@ -24,6 +25,11 @@ compileKotlin {
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = '1.8'
+}
+
+javafx {
+    version = "17.0.1"
+    modules = ['javafx.controls']
 }
 
 application {
