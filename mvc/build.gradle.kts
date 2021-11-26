@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:2.5.6")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc:2.5.6")
 	implementation("org.springframework.boot:spring-boot-starter-web:2.5.6")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")

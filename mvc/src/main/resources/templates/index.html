@@ -1,0 +1,61 @@
+<!--suppress HtmlFormInputWithoutLabel -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/cf4ee180e8.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        .mybg {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex flex-column align-items-center mt-3">
+    <h1>Task manager</h1>
+    <form class="form-inline mt-3" th:action="@{/add-list}" th:method="POST" th:object="${taskList}">
+        <input type="text" class="form-control" placeholder="Enter task-list's name" th:field="*{name}"/>
+        <button class="btn btn-outline-primary ml-1">Add</button>
+    </form>
+    <div class="card shadow-sm w-25 mt-3" th:each="list:${lists}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0" th:text="${list.name}"></h4>
+            <form class="ml-auto" th:action="@{/delete-list(listId=${list.listId})}" th:method="POST">
+                <button type="submit" class="btn btn-outline-danger mybg">Del</button>
+            </form>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" th:each="task:${list.tasks}"
+                th:style="${task.completed ? 'background-color: #dfd;' : 'background-color: white;'}">
+                <div class="d-flex text-nowrap">
+                    <div class="text-truncate h5 mt-auto mb-0 mr-auto " th:text="${task.description}"></div>
+                    <form class="ml-1" th:action="@{/complete(listId=${list.listId},taskId=${task.taskId})}"
+                          th:method="POST" th:style="${task.completed ? 'display:none' : 'display:block'}">
+                        <button class="btn btn-sm btn-outline-success mybg">
+                            <i class="far fa-calendar-check fa-lg"></i>
+                        </button>
+                    </form>
+                    <form class="ml-1" th:action="@{/delete-task(listId=${list.listId},taskId=${task.taskId})}"
+                          th:method="POST">
+                        <button class="btn btn-sm btn-outline-danger mybg">
+                            <i class="far fa-calendar-times fa-lg"></i>
+                        </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+        <div class="card-body d-flex justify-content-center">
+            <form class="form-inline mb-0" th:action="@{/add-task}" th:method="POST" th:object="${task}">
+                <input type="hidden" th:value="${list.listId}" name="listId"/>
+                <input type="text" class="form-control" placeholder="Enter task's name" th:field="*{description}">
+                <button class="btn btn-outline-primary ml-1">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
