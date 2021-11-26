@@ -15,3 +15,11 @@
 * использовать средства spring-framework для DI (dependency injection)
 
 [Пример](https://github.com/akirakozov/software-design/tree/master/java/mvc), который был рассмотрен на лекции.
+
+Примечания к решению:
+* для view-части был использан bootstrap
+* использованная база данных - PostgreSQL (13.4)
+* создано два `@Profile` (memory, database)
+* `@Profile("memory")` - храним данные о делах / списках в памяти
+* `@Profile("memory")` требует подключения к дб (видимо такое поведение происходит из-за за зависимостей)
+* `@Profile("database")` - подключаемся к локальной дб
