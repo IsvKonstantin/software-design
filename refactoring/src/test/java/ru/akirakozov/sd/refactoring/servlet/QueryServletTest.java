@@ -134,7 +134,9 @@ class QueryServletTest {
         new QueryServlet().doGet(httpServletRequest, httpServletResponse);
         String response = stringWriter.toString();
 
-        assertThat(response).isEqualToNormalizingNewlines("Unknown command: unknown\n");
+        assertThat(response).isEqualToNormalizingNewlines("<html><body>\n" +
+                "Unknown command: unknown\n" +
+                "</body></html>\n");
 
         verify(httpServletRequest).getParameter("command");
         verify(httpServletResponse).setContentType("text/html");

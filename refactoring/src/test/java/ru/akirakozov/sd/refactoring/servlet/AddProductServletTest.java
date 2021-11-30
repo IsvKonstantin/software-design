@@ -49,7 +49,6 @@ class AddProductServletTest {
 
         new AddProductServlet().doGet(httpServletRequest, httpServletResponse);
         ResultSet rs = preparedStatement.executeQuery();
-        rs.next();
 
         assertThat(stringWriter.toString().contains("OK")).isTrue();
         assertThat(rs.getBoolean("result")).isTrue();
