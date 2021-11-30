@@ -3,10 +3,11 @@ package ru.akirakozov.sd.refactoring.servlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 /**
  * @author akirakozov
@@ -14,7 +15,8 @@ import java.sql.Statement;
 public class AddProductServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        ResponseBuilder formatter = new ResponseBuilder(response);
         String name = request.getParameter("name");
         long price = Long.parseLong(request.getParameter("price"));
 
@@ -30,8 +32,8 @@ public class AddProductServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println("OK");
+        formatter.setResponseInfo("text/html", SC_OK);
+        formatter.addStatus("OK");
+        formatter.print();
     }
 }
