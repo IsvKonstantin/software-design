@@ -3,6 +3,9 @@ package ru.akirakozov.sd.refactoring.dao;
 import org.junit.jupiter.api.*;
 import ru.akirakozov.sd.refactoring.model.Product;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,13 +21,14 @@ class ProductDatabaseDaoTest {
 
     @BeforeAll
     static void createConnection() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:sqlite::memory:");
-        productDao = new ProductDatabaseDao(connection);
+        connection = DriverManager.getConnection("jdbc:sqlite:dao-test.db");
+        productDao = new ProductDatabaseDao("jdbc:sqlite:dao-test.db");
     }
 
     @AfterAll
-    static void closeConnection() throws SQLException {
+    static void closeConnection() throws SQLException, IOException {
         connection.close();
+        Files.deleteIfExists(Paths.get("dao-test.db"));
     }
 
     @BeforeEach

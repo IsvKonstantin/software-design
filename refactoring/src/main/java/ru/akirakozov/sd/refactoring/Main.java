@@ -18,20 +18,20 @@ import java.sql.Statement;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        ProductDao productDao;
+        String url = "jdbc:sqlite:test.db";
 
-        try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
+        try (Connection c = DriverManager.getConnection(url)) {
             String sql = "CREATE TABLE IF NOT EXISTS PRODUCT" +
                     "(ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     " NAME           TEXT    NOT NULL, " +
                     " PRICE          INT     NOT NULL)";
             Statement stmt = c.createStatement();
 
-            productDao = new ProductDatabaseDao(c);
-
             stmt.executeUpdate(sql);
             stmt.close();
         }
+
+        ProductDao productDao = new ProductDatabaseDao(url);
 
         Server server = new Server(8081);
 
