@@ -2,7 +2,6 @@ package ru.akirakozov.sd.refactoring.dao;
 
 import org.junit.jupiter.api.*;
 import ru.akirakozov.sd.refactoring.model.Product;
-import ru.akirakozov.sd.refactoring.servlet.DatabaseTestUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -101,7 +100,7 @@ class ProductDatabaseDaoTest {
 
     @Test
     @DisplayName("getProductsTotalPrice test")
-    void getProductsTotalPrice()  {
+    void getProductsTotalPrice() {
         long totalPrice = productDao.getProductsTotalPrice();
 
         assertThat(totalPrice).isEqualTo(900L);

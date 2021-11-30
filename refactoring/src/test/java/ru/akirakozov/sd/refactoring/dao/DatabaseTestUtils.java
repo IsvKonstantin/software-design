@@ -1,4 +1,4 @@
-package ru.akirakozov.sd.refactoring.servlet;
+package ru.akirakozov.sd.refactoring.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

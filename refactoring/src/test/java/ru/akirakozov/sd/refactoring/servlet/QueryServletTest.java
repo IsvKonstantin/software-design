@@ -1,38 +1,24 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import ru.akirakozov.sd.refactoring.dao.ProductDao;
+import ru.akirakozov.sd.refactoring.dao.ProductDatabaseDao;
+import ru.akirakozov.sd.refactoring.model.Product;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class QueryServletTest {
-    private static Connection connection;
+    private static final ProductDao productDao = mock(ProductDatabaseDao.class);
     private final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
     private final HttpServletResponse httpServletResponse = mock(HttpServletResponse.class);
-
-    @BeforeAll
-    static void createConnection() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:sqlite:test.db");
-    }
-
-    @AfterAll
-    static void closeConnection() throws SQLException {
-        connection.close();
-    }
-
-    @BeforeEach
-    void beforeEach() throws SQLException {
-        DatabaseTestUtils.createAndFillDatabase(connection);
-    }
 
     @Test
     @DisplayName("QueryServlet max query positive test")
@@ -42,8 +28,9 @@ class QueryServletTest {
 
         when(httpServletRequest.getParameter("command")).thenReturn("max");
         when(httpServletResponse.getWriter()).thenReturn(printWriter);
+        when(productDao.getProductWithMaxPrice()).thenReturn(new Product("galaxy9", 400L));
 
-        new QueryServlet().doGet(httpServletRequest, httpServletResponse);
+        new QueryServlet(productDao).doGet(httpServletRequest, httpServletResponse);
         String response = stringWriter.toString();
 
         assertThat(response).isEqualToNormalizingNewlines("<html><body>\n" +
@@ -64,8 +51,9 @@ class QueryServletTest {
 
         when(httpServletRequest.getParameter("command")).thenReturn("min");
         when(httpServletResponse.getWriter()).thenReturn(printWriter);
+        when(productDao.getProductWithMinPrice()).thenReturn(new Product("htc10", 200L));
 
-        new QueryServlet().doGet(httpServletRequest, httpServletResponse);
+        new QueryServlet(productDao).doGet(httpServletRequest, httpServletResponse);
         String response = stringWriter.toString();
 
         assertThat(response).isEqualToNormalizingNewlines("<html><body>\n" +
@@ -86,8 +74,9 @@ class QueryServletTest {
 
         when(httpServletRequest.getParameter("command")).thenReturn("sum");
         when(httpServletResponse.getWriter()).thenReturn(printWriter);
+        when(productDao.getProductsTotalPrice()).thenReturn(900L);
 
-        new QueryServlet().doGet(httpServletRequest, httpServletResponse);
+        new QueryServlet(productDao).doGet(httpServletRequest, httpServletResponse);
         String response = stringWriter.toString();
 
         assertThat(response).isEqualToNormalizingNewlines("<html><body>\n" +
@@ -108,8 +97,9 @@ class QueryServletTest {
 
         when(httpServletRequest.getParameter("command")).thenReturn("count");
         when(httpServletResponse.getWriter()).thenReturn(printWriter);
+        when(productDao.getProductsCount()).thenReturn(3L);
 
-        new QueryServlet().doGet(httpServletRequest, httpServletResponse);
+        new QueryServlet(productDao).doGet(httpServletRequest, httpServletResponse);
         String response = stringWriter.toString();
 
         assertThat(response).isEqualToNormalizingNewlines("<html><body>\n" +
@@ -131,7 +121,7 @@ class QueryServletTest {
         when(httpServletRequest.getParameter("command")).thenReturn("unknown");
         when(httpServletResponse.getWriter()).thenReturn(printWriter);
 
-        new QueryServlet().doGet(httpServletRequest, httpServletResponse);
+        new QueryServlet(productDao).doGet(httpServletRequest, httpServletResponse);
         String response = stringWriter.toString();
 
         assertThat(response).isEqualToNormalizingNewlines("<html><body>\n" +
