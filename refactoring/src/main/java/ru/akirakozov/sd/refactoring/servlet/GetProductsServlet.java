@@ -1,12 +1,12 @@
 package ru.akirakozov.sd.refactoring.servlet;
 
+import ru.akirakozov.sd.refactoring.dao.ProductDao;
+import ru.akirakozov.sd.refactoring.model.Product;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.List;
 
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
@@ -14,29 +14,18 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
  * @author akirakozov
  */
 public class GetProductsServlet extends HttpServlet {
+    private final ProductDao productDao;
+
+    public GetProductsServlet(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         ResponseBuilder formatter = new ResponseBuilder(response);
 
-        try {
-            try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                Statement stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT");
-
-                while (rs.next()) {
-                    String name = rs.getString("name");
-                    int price = rs.getInt("price");
-                    formatter.addLine(name + "\t" + price, true);
-                }
-
-                rs.close();
-                stmt.close();
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        List<Product> products = productDao.getProducts();
+        products.forEach(p -> formatter.addLine(p.toString(), true));
 
         formatter.setResponseInfo("text/html", SC_OK);
         formatter.print();
