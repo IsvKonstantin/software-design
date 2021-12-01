@@ -24,8 +24,8 @@ internal class TokenizerTest {
     @Test
     fun `invalid characters`() {
         assertThatThrownBy { tokenizer.tokenize("1 + b") }
+            .isInstanceOf(RuntimeException::class.java)
             .hasMessage("Invalid char: b")
-            .isInstanceOf(TokenizerException::class.java)
     }
 
     @Test

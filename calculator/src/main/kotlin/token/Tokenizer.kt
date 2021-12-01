@@ -1,7 +1,5 @@
 package token
 
-class TokenizerException(message: String) : RuntimeException(message)
-
 abstract class State {
     abstract fun next(tokens: MutableList<Token>): State
 }
@@ -38,7 +36,7 @@ class Tokenizer {
                 input[position] in digitChars -> return Number()
                 input[position] in braceChars -> tokens.add(Brace(input[position]))
                 input[position] in operationChars -> tokens.add(Operation(input[position]))
-                else -> throw TokenizerException("Invalid char: ${input[position]}")
+                else -> throw RuntimeException("Invalid char: ${input[position]}")
             }
 
             position++
