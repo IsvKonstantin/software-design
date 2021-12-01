@@ -6,14 +6,20 @@ interface Token {
     fun accept(visitor: TokenVisitor)
 }
 
-class NumberToken(val value: Int) : Token {
+data class NumberToken(val value: Int) : Token {
     override fun accept(visitor: TokenVisitor) = visitor.visit(this)
+
+    override fun toString(): String = value.toString()
 }
 
-class Brace(val value: Char) : Token {
+data class Brace(val value: Char) : Token {
     override fun accept(visitor: TokenVisitor) = visitor.visit(this)
+
+    override fun toString(): String = value.toString()
 }
 
-class Operation(val value: Char) : Token {
+data class Operation(val value: Char) : Token {
     override fun accept(visitor: TokenVisitor) = visitor.visit(this)
+
+    override fun toString(): String = value.toString()
 }
