@@ -1,6 +1,7 @@
 package token
 
-import token.BraceType.*
+import token.BraceType.LEFT
+import token.BraceType.RIGHT
 import token.OperationType.*
 import visitor.TokenVisitor
 

@@ -20,8 +20,8 @@ class PrintVisitor : TokenVisitor {
         tokens.add(token)
     }
 
-    fun print(tokens: List<Token>) {
+    fun println(tokens: List<Token>) {
         tokens.forEach { it.accept(this) }
-        print(this.tokens.joinToString(" ", "[", "]"))
+        println(this.tokens.joinToString(" ", "[", "]"))
     }
 }

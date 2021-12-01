@@ -65,4 +65,13 @@ internal class CalcVisitorTest {
             .isInstanceOf(RuntimeException::class.java)
             .hasMessage("Found brace in RPN")
     }
+
+    @Test
+    fun `empty test`() {
+        val calcVisitor = CalcVisitor()
+
+        Assertions.assertThatThrownBy { calcVisitor.evaluate(emptyList()) }
+            .isInstanceOf(RuntimeException::class.java)
+            .hasMessage("Invalid expression")
+    }
 }

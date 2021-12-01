@@ -41,16 +41,16 @@ internal class PrintVisitorTest {
             NumberToken(3),
             Brace(')')
         )
-        printVisitor.print(tokens)
+        printVisitor.println(tokens)
         assertThat(outContent.toString())
-            .isEqualTo("[NUMBER(10) PLUS NUMBER(5) MUL LEFT NUMBER(6) DIV NUMBER(2) MINUS NUMBER(3) RIGHT]")
+            .isEqualToIgnoringNewLines("[NUMBER(10) PLUS NUMBER(5) MUL LEFT NUMBER(6) DIV NUMBER(2) MINUS NUMBER(3) RIGHT]")
     }
 
     @Test
     fun `empty test`() {
         val printVisitor = PrintVisitor()
-        printVisitor.print(emptyList())
+        printVisitor.println(emptyList())
         assertThat(outContent.toString())
-            .isEqualTo("[]")
+            .isEqualToIgnoringNewLines("[]")
     }
 }

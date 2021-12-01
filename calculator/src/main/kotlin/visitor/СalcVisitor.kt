@@ -22,7 +22,7 @@ class CalcVisitor : TokenVisitor {
         val y = stack.removeFirst()
         val x = stack.removeFirst()
 
-        when(token.type) {
+        when (token.type) {
             OperationType.PLUS -> stack.push(x + y)
             OperationType.MINUS -> stack.push(x - y)
             OperationType.MUL -> stack.push(x * y)
@@ -30,7 +30,7 @@ class CalcVisitor : TokenVisitor {
         }
     }
 
-    fun evaluate(tokens: List<Token>) : Double {
+    fun evaluate(tokens: List<Token>): Double {
         tokens.forEach { it.accept(this) }
         return stack.poll() ?: throw RuntimeException("Invalid expression")
     }
