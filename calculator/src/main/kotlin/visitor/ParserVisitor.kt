@@ -5,7 +5,7 @@ import java.util.*
 
 class ParserVisitor : TokenVisitor {
     private val tokens: MutableList<Token> = mutableListOf()
-    private val stack: ArrayDeque<Token> = ArrayDeque()
+    private val stack: Deque<Token> = ArrayDeque()
 
     override fun visit(token: NumberToken) {
         tokens.add(token)
@@ -33,7 +33,7 @@ class ParserVisitor : TokenVisitor {
             }
         }
 
-        stack.addFirst(token)
+        stack.push(token)
     }
 
     fun convert(tokens: List<Token>): List<Token> {

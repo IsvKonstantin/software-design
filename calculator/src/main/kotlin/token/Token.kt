@@ -1,6 +1,7 @@
 package token
 
 import token.BraceType.*
+import token.OperationType.*
 import visitor.TokenVisitor
 
 interface Token {
@@ -14,7 +15,7 @@ data class NumberToken(val value: Int) : Token {
 }
 
 data class Brace(val value: Char) : Token {
-    val type = if (value == '(') LEFT else RIGHT
+    val type = braceMap[value]!!
 
     override fun accept(visitor: TokenVisitor) = visitor.visit(this)
 
@@ -22,23 +23,28 @@ data class Brace(val value: Char) : Token {
 }
 
 data class Operation(val value: Char) : Token {
-    val priority = getPriority(value)
+    val type = operationMap[value]!!
+    val priority = getPriority(type)
 
     override fun accept(visitor: TokenVisitor) = visitor.visit(this)
 
-    override fun toString(): String = operationMap[value]!!
+    override fun toString(): String = type.toString().uppercase()
 }
 
 enum class BraceType {
     LEFT, RIGHT
 }
 
-private val operationMap = mapOf('+' to "PLUS", '-' to "MINUS", '*' to "MUL", '/' to "DIV")
+enum class OperationType {
+    PLUS, MINUS, MUL, DIV
+}
 
-private fun getPriority(operation: Char): Int {
-    return when (operation) {
-        '+', '-' -> 2
-        '*', '/' -> 1
-        else -> throw IllegalArgumentException("Illegal operation")
+private val operationMap = mapOf('+' to PLUS, '-' to MINUS, '*' to MUL, '/' to DIV)
+private val braceMap = mapOf('(' to LEFT, ')' to RIGHT)
+
+private fun getPriority(operationType: OperationType): Int {
+    return when (operationType) {
+        PLUS, MINUS -> 1
+        MUL, DIV -> 2
     }
 }

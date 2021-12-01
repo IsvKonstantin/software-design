@@ -37,13 +37,13 @@ internal class ParserVisitorTest {
         val tokensConverted = listOf(
             NumberToken(10),
             NumberToken(5),
-            Operation('+'),
             NumberToken(6),
             NumberToken(2),
+            Operation('/'),
             NumberToken(3),
             Operation('-'),
-            Operation('/'),
             Operation('*'),
+            Operation('+'),
         )
 
         assertThat(parserVisitor.convert(tokens)).isEqualTo(tokensConverted)
