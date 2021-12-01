@@ -1,19 +1,45 @@
 package visitor
 
-import token.Brace
-import token.NumberToken
-import token.Operation
+import token.*
+import java.util.*
 
 class ParserVisitor : TokenVisitor {
+    private val tokens: MutableList<Token> = mutableListOf()
+    private val stack: ArrayDeque<Token> = ArrayDeque()
+
     override fun visit(token: NumberToken) {
-        TODO("Not yet implemented")
+        tokens.add(token)
     }
 
     override fun visit(token: Brace) {
-        TODO("Not yet implemented")
+        when (token.type) {
+            BraceType.LEFT -> stack.push(token)
+            BraceType.RIGHT -> {
+                tokens.let { list ->
+                    repeat(stack.takeWhile { t -> t !is Brace }.size) {
+                        list.add(stack.pop())
+                    }
+                }
+
+                stack.poll() ?: throw RuntimeException("Brace mismatch")
+            }
+        }
     }
 
     override fun visit(token: Operation) {
-        TODO("Not yet implemented")
+        tokens.let { list ->
+            repeat(stack.takeWhile { it is Operation && it.priority >= token.priority }.size) {
+                list.add(stack.pop())
+            }
+        }
+
+        stack.addFirst(token)
+    }
+
+    fun convert(tokens: List<Token>): List<Token> {
+        tokens.forEach { it.accept(this) }
+        this.tokens.addAll(stack)
+
+        return this.tokens.toList()
     }
 }
