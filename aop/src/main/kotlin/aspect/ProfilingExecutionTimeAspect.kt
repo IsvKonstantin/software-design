@@ -10,8 +10,8 @@ import java.util.*
 class ProfilingExecutionTimeAspect {
     private val executions = HashMap<String, MutableList<Double>>()
 
-    //    @Around("@annotation(aspect.Profile)")
-    @Around("execution(* plane.PlaneManagerImpl.*(..)) || execution(* passenger.model.implementations.*.*(..))")
+    @Around("@annotation(aspect.Profile)")
+//    @Around("execution(* plane.PlaneManagerImpl.*(..)) || execution(* passenger.model.implementations.*.*(..))")
     fun logExecutionTime(joinPoint: ProceedingJoinPoint): Any? {
         val executionStart = System.nanoTime()
         val methodName = "${joinPoint.signature.declaringTypeName}.${joinPoint.signature.name}"
