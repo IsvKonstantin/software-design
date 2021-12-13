@@ -14,18 +14,8 @@ dependencies {
     implementation 'org.springframework:spring-aop:5.3.13'
     implementation 'org.aspectj:aspectjrt:1.9.7'
     implementation 'org.aspectj:aspectjweaver:1.9.7'
-
-//    <dependency>
-//            <groupId>org.springframework</groupId>
-//            <artifactId>spring-core</artifactId>
-//            <version>${spring.version}</version>
-//        </dependency>
-//
-//    <dependency>
-//            <groupId>org.springframework</groupId>
-//            <artifactId>spring-context</artifactId>
-//            <version>${spring.version}</version>
-//        </dependency>
+    implementation 'org.springframework:spring-context:5.3.13'
+    implementation 'org.springframework:spring-core:5.3.13'
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test:1.6.0'
 }
