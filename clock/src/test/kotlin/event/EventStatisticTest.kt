@@ -12,32 +12,32 @@ import java.time.Instant
 
 internal class EventStatisticTest {
     private lateinit var clock: SettableClock
-    private lateinit var statsManager: EventsStatistic
+    private lateinit var eventsStatistic: EventsStatistic
 
     @BeforeEach
-    fun initialize() {
+    fun setUp() {
         clock = SettableClock(Instant.now())
-        statsManager = EventStatisticImpl(clock)
+        eventsStatistic = EventStatisticImpl(clock)
     }
 
     @Test
     fun `event statistic for unknown event should be empty`() {
-        assertThat(statsManager.getEventStatisticByName("unknown")).isEqualTo(0.0)
-        assertThat(statsManager.getAllEventStatistic()).isEmpty()
+        assertThat(eventsStatistic.getEventStatisticByName("unknown")).isEqualTo(0.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEmpty()
     }
 
     @Test
     fun `single event statistic test`() {
         val name = "name"
 
-        statsManager.incEvent(name)
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(1.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 1.0 / 60.0))
+        eventsStatistic.incEvent(name)
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(1.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 1.0 / 60.0))
 
-        statsManager.incEvent(name)
-        statsManager.incEvent(name)
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(3.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 3.0 / 60.0))
+        eventsStatistic.incEvent(name)
+        eventsStatistic.incEvent(name)
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(3.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 3.0 / 60.0))
     }
 
     @Test
@@ -45,19 +45,19 @@ internal class EventStatisticTest {
         val nameFirst = "nameFirst"
         val nameSecond = "nameSecond"
 
-        statsManager.incEvent(nameFirst)
-        statsManager.incEvent(nameSecond)
-        statsManager.incEvent(nameSecond)
-        assertThat(statsManager.getEventStatisticByName(nameFirst)).isEqualTo(1.0 / 60.0)
-        assertThat(statsManager.getEventStatisticByName(nameSecond)).isEqualTo(2.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(
+        eventsStatistic.incEvent(nameFirst)
+        eventsStatistic.incEvent(nameSecond)
+        eventsStatistic.incEvent(nameSecond)
+        assertThat(eventsStatistic.getEventStatisticByName(nameFirst)).isEqualTo(1.0 / 60.0)
+        assertThat(eventsStatistic.getEventStatisticByName(nameSecond)).isEqualTo(2.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(
             mapOf(nameFirst to 1.0 / 60.0, nameSecond to 2.0 / 60.0)
         )
 
-        statsManager.incEvent(nameFirst)
-        assertThat(statsManager.getEventStatisticByName(nameFirst)).isEqualTo(2.0 / 60.0)
-        assertThat(statsManager.getEventStatisticByName(nameSecond)).isEqualTo(2.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(
+        eventsStatistic.incEvent(nameFirst)
+        assertThat(eventsStatistic.getEventStatisticByName(nameFirst)).isEqualTo(2.0 / 60.0)
+        assertThat(eventsStatistic.getEventStatisticByName(nameSecond)).isEqualTo(2.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(
             mapOf(nameFirst to 2.0 / 60.0, nameSecond to 2.0 / 60.0)
         )
     }
@@ -66,29 +66,29 @@ internal class EventStatisticTest {
     fun `single event statistic with changing time test`() {
         val name = "name"
 
-        statsManager.incEvent(name)
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(1.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 1.0 / 60.0))
+        eventsStatistic.incEvent(name)
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(1.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 1.0 / 60.0))
 
         clock.now = clock.now.plus(Duration.ofMinutes(25))
-        statsManager.incEvent(name)
-        statsManager.incEvent(name)
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(3.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 3.0 / 60.0))
+        eventsStatistic.incEvent(name)
+        eventsStatistic.incEvent(name)
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(3.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 3.0 / 60.0))
 
         clock.now = clock.now.plus(Duration.ofMinutes(25))
-        statsManager.incEvent(name)
-        statsManager.incEvent(name)
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(5.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 5.0 / 60.0))
+        eventsStatistic.incEvent(name)
+        eventsStatistic.incEvent(name)
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(5.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 5.0 / 60.0))
 
         clock.now = clock.now.plus(Duration.ofMinutes(25))
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(4.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 4.0 / 60.0))
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(4.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 4.0 / 60.0))
 
         clock.now = clock.now.plus(Duration.ofMinutes(60))
-        assertThat(statsManager.getEventStatisticByName(name)).isEqualTo(0.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(mapOf(name to 0.0))
+        assertThat(eventsStatistic.getEventStatisticByName(name)).isEqualTo(0.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(mapOf(name to 0.0))
     }
 
     @Test
@@ -96,27 +96,27 @@ internal class EventStatisticTest {
         val nameFirst = "nameFirst"
         val nameSecond = "nameSecond"
 
-        statsManager.incEvent(nameFirst)
-        statsManager.incEvent(nameSecond)
+        eventsStatistic.incEvent(nameFirst)
+        eventsStatistic.incEvent(nameSecond)
         clock.now = clock.now.plus(Duration.ofMinutes(40))
-        statsManager.incEvent(nameSecond)
-        assertThat(statsManager.getEventStatisticByName(nameFirst)).isEqualTo(1.0 / 60.0)
-        assertThat(statsManager.getEventStatisticByName(nameSecond)).isEqualTo(2.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(
+        eventsStatistic.incEvent(nameSecond)
+        assertThat(eventsStatistic.getEventStatisticByName(nameFirst)).isEqualTo(1.0 / 60.0)
+        assertThat(eventsStatistic.getEventStatisticByName(nameSecond)).isEqualTo(2.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(
             mapOf(nameFirst to 1.0 / 60.0, nameSecond to 2.0 / 60.0)
         )
 
         clock.now = clock.now.plus(Duration.ofMinutes(40))
-        assertThat(statsManager.getEventStatisticByName(nameFirst)).isEqualTo(0.0)
-        assertThat(statsManager.getEventStatisticByName(nameSecond)).isEqualTo(1.0 / 60.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(
+        assertThat(eventsStatistic.getEventStatisticByName(nameFirst)).isEqualTo(0.0)
+        assertThat(eventsStatistic.getEventStatisticByName(nameSecond)).isEqualTo(1.0 / 60.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(
             mapOf(nameFirst to 0.0, nameSecond to 1.0 / 60.0)
         )
 
         clock.now = clock.now.plus(Duration.ofMinutes(40))
-        assertThat(statsManager.getEventStatisticByName(nameFirst)).isEqualTo(0.0)
-        assertThat(statsManager.getEventStatisticByName(nameSecond)).isEqualTo(0.0)
-        assertThat(statsManager.getAllEventStatistic()).isEqualTo(
+        assertThat(eventsStatistic.getEventStatisticByName(nameFirst)).isEqualTo(0.0)
+        assertThat(eventsStatistic.getEventStatisticByName(nameSecond)).isEqualTo(0.0)
+        assertThat(eventsStatistic.getAllEventStatistic()).isEqualTo(
             mapOf(nameFirst to 0.0, nameSecond to 0.0)
         )
     }
@@ -127,19 +127,19 @@ internal class EventStatisticTest {
         val nameSecond = "nameSecond"
         val nameThird = "nameThird"
 
-        statsManager.incEvent(nameFirst)
-        statsManager.incEvent(nameSecond)
-        statsManager.incEvent(nameSecond)
-        statsManager.incEvent(nameThird)
-        statsManager.incEvent(nameThird)
-        statsManager.incEvent(nameThird)
+        eventsStatistic.incEvent(nameFirst)
+        eventsStatistic.incEvent(nameSecond)
+        eventsStatistic.incEvent(nameSecond)
+        eventsStatistic.incEvent(nameThird)
+        eventsStatistic.incEvent(nameThird)
+        eventsStatistic.incEvent(nameThird)
 
         val default = System.out
         val captor = ByteArrayOutputStream()
 
         System.setOut(PrintStream(captor))
 
-        statsManager.printStatistic()
+        eventsStatistic.printStatistic()
         assertThat(captor.toString()).isEqualToIgnoringNewLines(
             """
             Event: nameFirst, rpm: 0.02
