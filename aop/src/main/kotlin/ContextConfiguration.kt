@@ -1,3 +1,5 @@
+@file:Suppress("SpringFacetCodeInspection")
+
 import aspect.ProfilingExecutionTimeAspect
 import dao.PlaneInMemoryDao
 import org.springframework.context.annotation.Bean
