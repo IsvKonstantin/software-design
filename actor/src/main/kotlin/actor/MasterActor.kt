@@ -13,10 +13,10 @@ import java.util.concurrent.CompletableFuture
 
 class MasterActor(
     private val queryParamsList: List<QueryParams>,
-    private val futureResult: CompletableFuture<HashMap<SearchEngine, String>>,
+    private val futureResult: CompletableFuture<HashMap<SearchEngine, List<String>>>,
     timeoutDuration: Duration
 ) : AbstractActor() {
-    private val result = HashMap<SearchEngine, String>()
+    private val result = HashMap<SearchEngine, List<String>>()
 
     init {
         context.receiveTimeout = timeoutDuration
