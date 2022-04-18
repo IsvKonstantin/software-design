@@ -33,3 +33,7 @@
 Пример:
 * [Пример](https://github.com/akirakozov/software-design/tree/master/java/test-containers-example) mavеn конфига,
 который при сборке добавляет в локальный docker registry java приложение.
+
+Примечания:
+* Сборка биржи в локальный docker-registry: `mvn -am -pl market package`
+* Запуск итеграционных тесов (testcontainers): `mvn -am -pl client test`
