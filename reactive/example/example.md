@@ -1,10 +1,15 @@
 Команды:
+
 `curl -X GET "http://localhost:8080/create-user?id=...&username=...&currency=..."`
+
 `curl -X GET "http://localhost:8080/get-users"`
+
 `curl -X GET "http://localhost:8080/add-product?name=...&price=..."`
+
 `curl -X GET "http://localhost:8080/get-products?id=..."`
 
 Пример исполнения:
+
 ```
 C:\Users\Flexatroid>curl -X GET "http://localhost:8080/create-user?id=1&username=Chovy&currency=USD"
 Created user: [1:Chovy:USD]
