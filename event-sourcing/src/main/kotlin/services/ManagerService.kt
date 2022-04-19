@@ -5,12 +5,13 @@ import exceptions.UnknownAccountException
 import storage.AccountCreated
 import storage.AccountExtended
 import storage.EventStorage
+import java.time.Clock
 import java.time.Duration
-import java.time.LocalDateTime
+import java.time.Instant
 
-data class Account(val login: String, val expirationDate: LocalDateTime)
+data class Account(val login: String, val expirationDate: Instant)
 
-class ManagerService(private val eventStorage: EventStorage) {
+class ManagerService(private val eventStorage: EventStorage, private val clock: Clock) {
 
     private fun isAccountCreated(login: String): Boolean {
         return eventStorage.getEvents(login).any { it is AccountCreated }
@@ -25,13 +26,14 @@ class ManagerService(private val eventStorage: EventStorage) {
         if (isAccountCreated(login)) {
             throw AccountExistsException()
         }
-        eventStorage.submitEvent(AccountCreated(login, LocalDateTime.now(), duration))
+
+        eventStorage.submitEvent(AccountCreated(login, clock.instant(), duration))
     }
 
     fun extendAccount(login: String, duration: Duration) {
         if (!isAccountCreated(login)) {
             throw UnknownAccountException()
         }
-        eventStorage.submitEvent(AccountExtended(login, LocalDateTime.now(), duration))
+        eventStorage.submitEvent(AccountExtended(login, clock.instant(), duration))
     }
 }

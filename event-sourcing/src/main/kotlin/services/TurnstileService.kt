@@ -5,15 +5,15 @@ import exceptions.TurnstileException
 import storage.Enter
 import storage.EventStorage
 import storage.Exit
-import java.time.LocalDateTime
+import java.time.Clock
 
-class TurnstileService(private val eventStorage: EventStorage) {
+class TurnstileService(private val eventStorage: EventStorage, private val clock: Clock) {
 
     private fun enterIsPossible(login: String) {
         val expirationDate = eventStorage.getAccountExpirationDate(login)
 
         when {
-            expirationDate < LocalDateTime.now() -> throw AccountExpiredException()
+            clock.instant().isAfter(expirationDate) -> throw AccountExpiredException()
             eventStorage.getEvents(login).last() is Enter -> throw TurnstileException("'$login' already entered")
         }
     }
@@ -26,11 +26,11 @@ class TurnstileService(private val eventStorage: EventStorage) {
 
     fun enter(login: String) {
         enterIsPossible(login)
-        eventStorage.submitEvent(Enter(login, LocalDateTime.now()))
+        eventStorage.submitEvent(Enter(login, clock.instant()))
     }
 
     fun exit(login: String) {
         exitIsPossible(login)
-        eventStorage.submitEvent(Exit(login, LocalDateTime.now()))
+        eventStorage.submitEvent(Exit(login, clock.instant()))
     }
 }
